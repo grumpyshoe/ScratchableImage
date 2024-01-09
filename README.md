@@ -1,7 +1,7 @@
 <h1 align="center">ScratchableImage</h1>
 
 <p align="center">
-  <a href="/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/License-MIT-purple.svg"/></a>
+  <a href="/LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-purple.svg"/></a>
   <a href="https://android-arsenal.com/api?level=26"><img alt="API" src="https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat"/></a>
 </p>
 
