@@ -1,4 +1,4 @@
-package com.grumpyshoe.scratcheffect.ui.theme
+package com.grumpyshoe.scratchable.example.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

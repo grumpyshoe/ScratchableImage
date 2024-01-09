@@ -20,8 +20,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -37,25 +39,20 @@ import androidx.compose.ui.unit.dp
  * based on https://gist.github.com/ardakazanci/22290e6c4f69dd5274e3edf9690c118d from ardakazanci/ScratchEffect.kt
  *
  */
-
 @Composable
 fun ScratchableImage(
     modifier: Modifier = Modifier,
     @DrawableRes image: Int,
-    eraserRadius: Dp = 50.dp,
+    eraserRadius: Dp = 25.dp,
     onTouch: () -> Unit
 ) {
 
-    // Log.d("fdsfds", "rrr recompose id: $id; image:$image")
-
     val context = LocalContext.current
-    var touched by remember { mutableStateOf(false) }
     var touchPoints by remember { mutableStateOf(listOf<Offset>()) }
     var scratchBitmapInit by remember { mutableStateOf<ImageBitmap?>(null) }
     var scratchBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var componentSize by remember { mutableStateOf(IntSize.Zero) }
     val imageBitmap: ImageBitmap = context.resources.getDrawable(image, context.theme).let { drawable ->
-
         if (drawable is BitmapDrawable) {
             drawable.bitmap
         } else {
@@ -77,14 +74,6 @@ fun ScratchableImage(
         scratchBitmap = scratchBitmapInit
         touchPoints = emptyList()
     }
-
-    LaunchedEffect(touched) {
-        if (touched) {
-            onTouch()
-        }
-    }
-
-
 
     // Scratch Image
     Image(

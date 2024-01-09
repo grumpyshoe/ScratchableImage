@@ -1,4 +1,4 @@
-package com.grumpyshoe.scratcheffect
+package com.grumpyshoe.scratchable.example
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 sealed class GameState {
-    object RUNNING : GameState()
-    object WIN : GameState()
-    object LOOSE : GameState()
+    data object RUNNING : GameState()
+    data object WIN : GameState()
+    data object LOSE : GameState()
 }
 
 class MainViewModel : ViewModel() {
@@ -26,9 +26,7 @@ class MainViewModel : ViewModel() {
     private var scratchFieldState = MutableList(9) { false }
 
     init {
-
         _answerList.tryEmit(generateAnswers())
-
     }
 
     private fun generateAnswers(): List<Boolean> {
@@ -59,7 +57,7 @@ class MainViewModel : ViewModel() {
         if (scratchCounter >= 3 && successCounter == 3) {
             _state.tryEmit(GameState.WIN)
         } else if (scratchCounter >= 3 && successCounter < 3) {
-            _state.tryEmit(GameState.LOOSE)
+            _state.tryEmit(GameState.LOSE)
         }
     }
 

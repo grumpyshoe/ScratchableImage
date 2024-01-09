@@ -1,14 +1,10 @@
-package com.grumpyshoe.scratcheffect
+package com.grumpyshoe.scratchable.example
 
 import android.annotation.SuppressLint
-import android.graphics.Paint
-import android.graphics.RectF
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,9 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -36,21 +29,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.text.EmojiSupportMatch
 import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.grumpyshoe.scratchable.ScratchableImage
-import com.grumpyshoe.scratcheffect.ui.theme.ScratchEffectTheme
+import com.grumpyshoe.scratchable.example.ui.theme.ScratchableImageExampleTheme
+import com.grumpyshoe.scratcheffect.R
 
 class MainActivity : ComponentActivity() {
 
@@ -61,7 +47,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ScratchEffectTheme {
+            ScratchableImageExampleTheme {
                 Scaffold {
 
                     val answerList by viewModel.answerList.collectAsState()
@@ -114,11 +100,11 @@ fun ScratchGameView(
                 onScratch = onScratch
             )
 
-            GameState.WIN -> WinnerScreen(
+            GameState.WIN -> WinScreen(
                 reset = reset
             )
 
-            GameState.LOOSE -> LooserScreen(
+            GameState.LOSE -> LoseScreen(
                 reset = reset
             )
         }
@@ -142,7 +128,6 @@ fun ScratchField(
         itemsIndexed(answerList) { index, isWinField ->
 
             Box(
-                modifier = Modifier,
                 contentAlignment = Alignment.Center
             ) {
 
@@ -156,10 +141,7 @@ fun ScratchField(
                             else -> R.drawable.blank
                         }
                     },
-                    eraserRadius = 15.dp,
-                    onTouch = {
-                        onScratch(index, isWinField)
-                    }
+                    onTouch = { onScratch(index, isWinField) }
                 )
             }
         }
@@ -168,7 +150,7 @@ fun ScratchField(
 
 
 @Composable
-fun WinnerScreen(reset: () -> Unit) {
+fun WinScreen(reset: () -> Unit) {
     Box(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -187,7 +169,7 @@ fun WinnerScreen(reset: () -> Unit) {
 }
 
 @Composable
-fun LooserScreen(reset: () -> Unit) {
+fun LoseScreen(reset: () -> Unit) {
 
     Box() {
         Column(
@@ -243,7 +225,7 @@ private fun LooserState() {
     MaterialTheme {
         ScratchGameView(
             answerList = List(9) { (0..1).random() == 1 },
-            gameState = GameState.LOOSE,
+            gameState = GameState.LOSE,
             onScratch = { _, _ -> },
             reset = {}
         )
